@@ -9,7 +9,7 @@ from datetime import datetime
 
 class Server:
     IP = "0.0.0.0"
-    PORT = 8000
+    PORT = 5050
     ADDR = (IP, PORT)
     SERVER = ()
     SIZE = 4096
@@ -21,7 +21,7 @@ class Server:
     def main(self):
         db_conn = sqlite3.connect('Server.db')
         self.create_db(db_conn)
-        db_conn.execute(f'UPDATE Users SET clientId = NULL, openedFilePath = NULL')
+        db_conn.execute(f'UPDATE Users SET clientId = NULL')
         db_conn.commit()
         db_conn.close()
 
@@ -65,11 +65,40 @@ class Server:
                     if msg == "exit": # when the app is closed
                         exit = True
                         break
+                    
+                    elif msg[:3] == "reg": # when client registers a new account
+                        msg = msg[4:]
+                        username = msg.split()[0]
+                        password = msg.split()[1]
+                        password_rep = msg.split()[2]
+                        temp = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
+                        if password != password_rep:
+                            self.send(conn, "Passwords do not match.")
+                        elif temp:
+                            self.send(conn, "This username has already been used.")
+                        else:
+                            db_conn.execute(f'INSERT INTO `Users` (`username`, `password`) VALUES("{username}", "{password}")')
+                            db_conn.commit()
+                            client = self.CLIENTS[client_id]
+                            self.send(conn, "online")
+                            print(f"{client_id}. Successefuly registered: username - {username}, password - {password}.")
+
                     elif msg[:5] == "login": # when user login
                         msg = msg[6:]
-                        login = msg.split()[0]
+                        username = msg.split()[0]
                         password = msg.split()[1]
-                        self.send(conn, "online")
+                       # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        passwordd = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
+                        if not passwordd:
+                            self.send(conn, "There is no user with such login and password.")
+                            print(f"{client_id}. There is no user with login - {username}.")
+                        elif str(passwordd[0]) != str(password):
+                            self.send(conn, "There is no user with such login and password.")
+                            print(f"{client_id}. The password - {password} for user with login - {username} is wrong.")
+                        else: 
+                            self.send(conn, "online")
+                            print(f'{client_id}. Logged in.')
+                       
 #Есть ли юзер с этим логом на серве. достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
 
    
@@ -79,12 +108,9 @@ class Server:
     def create_db(self, db_conn):
         db_conn.execute('''CREATE TABLE IF NOT EXISTS Users (
             userId INTEGER PRIMARY KEY AUTOINCREMENT ,
-            login STRING NOT NULL ,
+            username STRING NOT NULL ,
             password STRING NOT NULL ,
-            clientId INTEGER ,
-            openedFilePath STRING ,
-            regTime STRING NOT NULL ,
-            lastLogInTime STRING )''')
+            clientId INTEGER)''')
         db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedule (
             creatorId INTEGER NOT NULL ,
             guestId INTEGER NOT NULL ,

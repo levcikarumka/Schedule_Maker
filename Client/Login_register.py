@@ -8,11 +8,12 @@ from Schedule_create import mainform
 import socket
 from time import sleep
 from Login_screen import LoginScreen
+from Register_screen import RegisterScreen
 
 class Client:
     def __init__(self):
         self.IP = "127.0.0.1"
-        self.PORT = 8000
+        self.PORT = 5050
         self.SIZE = 4096
         self.FORMAT = "utf-8"
 
@@ -41,8 +42,6 @@ class Client:
 client = Client()
 
 root = Tk()
-#connection = mysql.connector.connect(host='localhost', user='root', port='3306', password='', database='sm_login_password')
-#c = connection.cursor()
 
 # Window width and height
 w = root.winfo_screenwidth()
@@ -76,7 +75,7 @@ close_button.place(x=410, y=10)
 close_button['command'] = close_window
 mainframe = tk.Frame(root, width=w, height=h)
 mainframe.pack()
-login_frame = LoginScreen(mainframe, client).loginframe
+login_frame = LoginScreen(mainframe, client, title_label).loginframe
 login_frame.pack()
 
 
@@ -243,7 +242,7 @@ login_frame.pack()
 #                insert_query = "INSERT INTO `users`(`username`, `password`) VALUES (%s,%s)"
 #                c.execute(insert_query, values)
 #                connection.commit()
-#                messagebox.showinfo('Register', 'Your registration went successfully')
+#                 
 #                registerframe.forget()
 #                loginframe.pack(fill='both', expand=1)
 #                title_label['text'] = 'Login'

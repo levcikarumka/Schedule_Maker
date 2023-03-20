@@ -1,7 +1,12 @@
 from tkinter import *
+from Register_screen import RegisterScreen
+from tkinter import messagebox 
+
 class LoginScreen():
-    def __init__ (self, mainframe, client):
+    def __init__ (self, mainframe, client, title_label):
         self.client = client
+        self.title_label = title_label
+        self.mainframe = mainframe
         self.loginframe = Frame(mainframe, width=1920, height=1080)
         self.login_contentframe = Frame(self.loginframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
 
@@ -16,7 +21,7 @@ class LoginScreen():
         self.closed_eye_icon = PhotoImage(file=cei)
         self.open_eye_icon = PhotoImage(file=oei)
 
-        see_password_button = Button(self.login_contentframe, image=self.open_eye_icon, bg='cyan')
+        self.see_password_button = Button(self.login_contentframe, image=self.open_eye_icon, bg='cyan')
 
         login_button = Button(self.login_contentframe, text="Login", font=("Ariel", 16), bg="green", fg="#fff", padx=25, pady=10, width=25)
 
@@ -32,13 +37,13 @@ class LoginScreen():
         self.password_label.grid(row=1, column=0, pady=15)
         self.password_entry.grid(row=1, column=1)
 
-        see_password_button.grid(row=1, column=2)
+        self.see_password_button.grid(row=1, column=2)
 
         login_button.grid(row=2, column=0, columnspan=2, padx=20, pady=40)
 
         to_register_label.grid(row=3, column=0, columnspan=2, padx=20, pady=40)
 
-        see_password_button['command'] = self.show_password
+        self.see_password_button['command'] = self.show_password
 
         to_register_label.bind("<Button-1>", lambda page: self.to_register())
 
@@ -58,7 +63,7 @@ class LoginScreen():
 
     def to_register(self):
         self.loginframe.pack_forget()
-        self.registerframe.pack(fill='both', expand=1)
+        RegisterScreen(self.mainframe, self.client, self.loginframe, self.title_label).registerframe.pack()
         self.title_label['text'] = 'Register'
         self.title_label['bg'] = 'blue'
 
@@ -69,12 +74,16 @@ class LoginScreen():
 
         username = self.username_entry.get().strip()
         password = self.password_entry.get().strip()
+        
+        if len(username) > 0 and len(password) > 0:
 
-        self.client.send(f"login {username} {password}")
+            self.client.send(f"login {username} {password}")
 
-        msg = self.client.recv()
+            msg = self.client.recv()
 
-        if msg == 'online':
-            print("MLG")
+            if msg == 'online':
+                messagebox.showinfo('Login', 'Your login went successfully')
+            else:
+                messagebox.showwarning('Login', msg)
 
 #проверить на знаки особенные и пробелы
