@@ -1,6 +1,7 @@
 from tkinter import *
 class LoginScreen():
     def __init__ (self, mainframe, client):
+        self.client = client
         self.loginframe = Frame(mainframe, width=1920, height=1080)
         self.login_contentframe = Frame(self.loginframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
 
@@ -41,7 +42,7 @@ class LoginScreen():
 
         to_register_label.bind("<Button-1>", lambda page: self.to_register())
 
-      #  login_button['command'] = self.login
+        login_button['command'] = self.login
 
 
 
@@ -64,23 +65,16 @@ class LoginScreen():
 
     # Account login
 
- #  # def login(self):
- #     #  username = self.username_entry.get().strip()
- #     #  password = self.password_entry.get().strip()
-#
- #    #   values = (username, password)
- #     #  select_query = "SELECT * FROM `users` WHERE `username` = %s and `password` = %s"
- #       c.execute(select_query, values)
- #       user = c.fetchone()
- #       try:
- #           len(user)
- #           #messagebox.showinfo('Login', "Login successfully")
- #           mainformwindow = tk.Toplevel()
- #           app = mainform(mainformwindow)
- #           root.withdraw()
- #           mainformwindow.protocol("WM_DELETE_WINDOW", close_window)
-#
- #       except:
- #           messagebox.showwarning('Login', "Wrong username or password")
+    def login(self):
 
+        username = self.username_entry.get().strip()
+        password = self.password_entry.get().strip()
 
+        self.client.send(f"login {username} {password}")
+
+        msg = self.client.recv()
+
+        if msg == 'online':
+            print("MLG")
+
+#проверить на знаки особенные и пробелы

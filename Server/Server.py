@@ -30,6 +30,7 @@ class Server:
         self.SERVER = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.SERVER.bind(self.ADDR)
         self.SERVER.listen()
+        
 
         print(f"Listening: {self.IP}:{self.PORT}")
         create_thread(self.new_client_thread)
@@ -64,6 +65,13 @@ class Server:
                     if msg == "exit": # when the app is closed
                         exit = True
                         break
+                    elif msg[:5] == "login": # when user login
+                        msg = msg[6:]
+                        login = msg.split()[0]
+                        password = msg.split()[1]
+                        self.send(conn, "online")
+#Есть ли юзер с этим логом на серве. достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
+
    
     def send(self, conn, msg):
         conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
@@ -77,7 +85,7 @@ class Server:
             openedFilePath STRING ,
             regTime STRING NOT NULL ,
             lastLogInTime STRING )''')
-        db_conn.execute('''CREATE TABLE IF NOT EXISTS Accesses (
+        db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedule (
             creatorId INTEGER NOT NULL ,
             guestId INTEGER NOT NULL ,
             path STRING NOT NULL ,

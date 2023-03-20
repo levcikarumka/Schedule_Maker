@@ -33,6 +33,10 @@ class Client:
     def send(self, msg):
         msg = msg + "|"
         self.conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
+    
+    def recv(self):
+        msg = self.conn.recv(self.SIZE).decode(self.FORMAT, errors= 'ignore')
+        return msg
 
 client = Client()
 
