@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox 
 from ScheduleRegister_screen import ScheduleRegisterScreen
+from Timetable_screen import TimetableScreen
 
 class ScheduleLoginScreen():
     def __init__ (self, mainframe, client, loginframe, title_label):
@@ -93,7 +94,7 @@ class ScheduleLoginScreen():
 
     def to_timetableEdit(self):
         self.scheduleloginframe.pack_forget()
-       # RegisterScreen(self.mainframe, self.client, self.loginframe, self.title_label).registerframe.pack()
+        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label).timetableframe.pack()
         self.title_label['text'] = 'Edit your timetable'
         self.title_label['bg'] = 'orange'
 
