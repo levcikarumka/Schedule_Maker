@@ -111,6 +111,7 @@ class Server:
                             self.send(conn, "This title has already been used.")
                         else:
                             db_conn.execute(f'INSERT INTO `Schedules` (`title`, `password`) VALUES("{title}", "{password}")')
+                            db_conn.execute(f'INSERT INTO `Permissions` (`guestUsername`, `scheduleTitle`) VALUES("{username}", "{title}")')
                             db_conn.commit()
                             client = self.CLIENTS[client_id]
                             self.send(conn, "online")
@@ -129,13 +130,16 @@ class Server:
                             self.send(conn, "There is no schedule with such title and password.")
                             print(f"{client_id}. The password - {password} for schedule with title - {title} is wrong.")
                         else: 
-                            userId = db_conn.execute(f'SELECT `userId` FROM `Users` WHERE `username` = "{username}"').fetchone() 
-                           # if userId not in db_conn.execute(f'SELECT `userIds` FROM `Schedule` WHERE `title` = "{title}"').fetchone():
-
+                            if username not in str(db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall()):
+                                db_conn.execute(f'INSERT INTO `Permissions` (`guestUsername`, `scheduleTitle`) VALUES("{username}", "{title}")')
+                                db_conn.commit()
                             self.send(conn, "online")
                             print(f'{client_id}. Logged in.')
+                            print(db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall() )
+
+#str(db_conn.execute(f'SELECT `title` FROM `Schedules` WHERE `password` = "{f}"').fetchall())
                        
-#Есть ли юзер с этим логом на серве. достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
+#достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
 
    
     def send(self, conn, msg):
@@ -150,10 +154,11 @@ class Server:
         db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedules (
             scheduleId INTEGER PRIMARY KEY AUTOINCREMENT ,
             title STRING NOT NULL ,
-            password STRING NOT NULL ,
-            userIds INTEGER[] )''')
-
-            
+            password STRING NOT NULL)''')
+        db_conn.execute('''CREATE TABLE IF NOT EXISTS Permissions (
+            PermissionsId INTEGER PRIMARY KEY AUTOINCREMENT ,
+            guestUsername STRING NOT NULL,
+            scheduleTitle STRING NOT NULL)''')
 
 def create_thread(thread_function, args=(), daemon_state='True', name_extra='', start='True'):
     new_thread = threading.Thread(target=thread_function, args=args)
