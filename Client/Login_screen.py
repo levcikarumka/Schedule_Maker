@@ -1,6 +1,7 @@
 from tkinter import *
 from Register_screen import RegisterScreen
-from tkinter import messagebox 
+from tkinter import messagebox
+from ScheduleLogin_screen import ScheduleLoginScreen
 
 class LoginScreen():
     def __init__ (self, mainframe, client, title_label):
@@ -82,7 +83,12 @@ class LoginScreen():
             msg = self.client.recv()
 
             if msg == 'online':
-                messagebox.showinfo('Login', 'Your login went successfully')
+                self.loginframe.pack_forget()
+                ScheduleLoginScreen(self.mainframe, self.client, self.loginframe, self.title_label).scheduleloginframe.pack()
+                self.title_label['text'] = 'Schedule Login'
+                self.title_label['bg'] = 'purple'
+                self.title_label['width'] = '25'
+
             else:
                 messagebox.showwarning('Login', msg)
 

@@ -98,6 +98,42 @@ class Server:
                         else: 
                             self.send(conn, "online")
                             print(f'{client_id}. Logged in.')
+
+                    elif msg[:6] == "create": # when client registers a new account
+                        msg = msg[7:]
+                        title = msg.split()[0]
+                        password = msg.split()[1]
+                        password_rep = msg.split()[2]
+                        temp = db_conn.execute(f'SELECT `password` FROM `Schedules` WHERE `title` = "{title}"').fetchone() 
+                        if password != password_rep:
+                            self.send(conn, "Passwords do not match.")
+                        elif temp:
+                            self.send(conn, "This title has already been used.")
+                        else:
+                            db_conn.execute(f'INSERT INTO `Schedules` (`title`, `password`) VALUES("{title}", "{password}")')
+                            db_conn.commit()
+                            client = self.CLIENTS[client_id]
+                            self.send(conn, "online")
+                            print(f"{client_id}. Successefuly registered: title - {title}, password - {password}.")
+                    
+                    elif msg[:9] == "sch_login": # when user login
+                        msg = msg[10:]
+                        title = msg.split()[0]
+                        password = msg.split()[1]
+                       # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        passwordd = db_conn.execute(f'SELECT `password` FROM `Schedules` WHERE `title` = "{title}"').fetchone() 
+                        if not passwordd:
+                            self.send(conn, "There is no schedule with such title and password.")
+                            print(f"{client_id}. There is no schedule with title - {title}.")
+                        elif str(passwordd[0]) != str(password):
+                            self.send(conn, "There is no schedule with such title and password.")
+                            print(f"{client_id}. The password - {password} for schedule with title - {title} is wrong.")
+                        else: 
+                            userId = db_conn.execute(f'SELECT `userId` FROM `Users` WHERE `username` = "{username}"').fetchone() 
+                           # if userId not in db_conn.execute(f'SELECT `userIds` FROM `Schedule` WHERE `title` = "{title}"').fetchone():
+
+                            self.send(conn, "online")
+                            print(f'{client_id}. Logged in.')
                        
 #Есть ли юзер с этим логом на серве. достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
 
@@ -111,12 +147,11 @@ class Server:
             username STRING NOT NULL ,
             password STRING NOT NULL ,
             clientId INTEGER)''')
-        db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedule (
-            creatorId INTEGER NOT NULL ,
-            guestId INTEGER NOT NULL ,
-            path STRING NOT NULL ,
-            FOREIGN KEY (creatorId) REFERENCES Users (userId) ,
-            FOREIGN KEY (guestId) REFERENCES Users (userId) )''')
+        db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedules (
+            scheduleId INTEGER PRIMARY KEY AUTOINCREMENT ,
+            title STRING NOT NULL ,
+            password STRING NOT NULL ,
+            userIds INTEGER[] )''')
 
             
 
