@@ -71,13 +71,14 @@ class Server:
                         username = msg.split()[0]
                         password = msg.split()[1]
                         password_rep = msg.split()[2]
+                        start_val = "000000000000000000000000"
                         temp = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
                         if password != password_rep:
                             self.send(conn, "Passwords do not match.")
                         elif temp:
                             self.send(conn, "This username has already been used.")
                         else:
-                            db_conn.execute(f'INSERT INTO `Users` (`username`, `password`) VALUES("{username}", "{password}")')
+                            db_conn.execute(f'INSERT INTO `Users` (`username`, `password`, `monday`,  `tuesday`,  `wednesday`,  `thursday`,  `friday`,  `saturday`,  `sunday`) VALUES("{username}", "{password}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}")')
                             db_conn.commit()
                             client = self.CLIENTS[client_id]
                             self.send(conn, "online")
@@ -99,7 +100,7 @@ class Server:
                             self.send(conn, "online")
                             print(f'{client_id}. Logged in.')
 
-                    elif msg[:6] == "create": # when client registers a new account
+                    elif msg[:6] == "create": # when client creates a new schedule
                         msg = msg[7:]
                         title = msg.split()[0]
                         password = msg.split()[1]
@@ -117,7 +118,7 @@ class Server:
                             self.send(conn, "online")
                             print(f"{client_id}. Successefuly registered: title - {title}, password - {password}.")
                     
-                    elif msg[:9] == "sch_login": # when user login
+                    elif msg[:9] == "sch_login": # when user login into the scedule
                         msg = msg[10:]
                         title = msg.split()[0]
                         password = msg.split()[1]
@@ -137,11 +138,99 @@ class Server:
                             print(f'{client_id}. Logged in.')
                             print(db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall() )
 
+                    elif msg == "tt":
+                        self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+       
+                    elif msg[:8] == "tt_st_ch": # when user changes his own timetbale
+                        msg = msg[9:]
+                        day = int(msg.split()[0])
+                        time = int(msg.split()[1])
+                        day_half = day % 2
+                        time_ind = 12*day_half + time
+                        if day // 2 == 0:
+                            current = str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `monday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 1:
+                            current = str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]                    
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `tuesday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 2:
+                            current = str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `wednesday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 3:
+                            current = str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `thursday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 4:
+                            current = str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `friday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 5:
+                            current = str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `saturday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+                        elif day // 2 == 6:
+                            current = str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3]
+                            if current[time_ind] == '0':
+                                new = current[:time_ind] + "1" + current[time_ind+1:]
+                            else:
+                                new = current[:time_ind] + "0" + current[time_ind+1:]
+
+                            db_conn.execute(f'UPDATE `Users` SET `sunday` = "{str(new)}" WHERE `username` = "{username}"')
+                            db_conn.commit()
+                            print(new)
+
+                       # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        
+
 #str(db_conn.execute(f'SELECT `title` FROM `Schedules` WHERE `password` = "{f}"').fetchall())
                        
 #достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
 
-   
     def send(self, conn, msg):
         conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
 
@@ -150,6 +239,13 @@ class Server:
             userId INTEGER PRIMARY KEY AUTOINCREMENT ,
             username STRING NOT NULL ,
             password STRING NOT NULL ,
+            monday CHAR NOT NULL,
+            tuesday CHAR NOT NULL,
+            wednesday CHAR NOT NULL,
+            thursday CHAR NOT NULL,
+            friday CHAR NOT NULL,
+            saturday CHAR NOT NULL,
+            sunday CHAR NOT NULL,
             clientId INTEGER)''')
         db_conn.execute('''CREATE TABLE IF NOT EXISTS Schedules (
             scheduleId INTEGER PRIMARY KEY AUTOINCREMENT ,

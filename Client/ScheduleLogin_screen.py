@@ -94,7 +94,17 @@ class ScheduleLoginScreen():
 
     def to_timetableEdit(self):
         self.scheduleloginframe.pack_forget()
-        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label).timetableframe.pack()
+        self.client.send(f"tt")
+        self.array = []
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        self.array.append(self.client.recv())
+        print(self.array)
+        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array).timetableframe.pack()
         self.title_label['text'] = 'Edit your timetable'
         self.title_label['bg'] = 'orange'
 
