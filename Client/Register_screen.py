@@ -85,7 +85,7 @@ class RegisterScreen():
         password = self.password_entry_reg.get().strip()
         passwordrep = self.confirm_password_entry_reg.get().strip()
 
-        if len(username) > 0 and len(password) > 0 and len(passwordrep):
+        if len(username) > 0 and len(password) > 0 and len(passwordrep) and " " not in username and " " not in password:
 
             self.client.send(f"reg {username} {password} {passwordrep}")
             msg = self.client.recv()

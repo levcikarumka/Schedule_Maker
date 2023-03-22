@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox 
 from ScheduleRegister_screen import ScheduleRegisterScreen
 from Timetable_screen import TimetableScreen
+from Schedule_screen import ScheduleScreen
 
 class ScheduleLoginScreen():
     def __init__ (self, mainframe, client, loginframe, title_label):
@@ -96,13 +97,9 @@ class ScheduleLoginScreen():
         self.scheduleloginframe.pack_forget()
         self.client.send(f"tt")
         self.array = []
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
-        self.array.append(self.client.recv())
+        for i in range(0, 7):
+            self.array.append(self.client.recv())
+
         print(self.array)
         TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array).timetableframe.pack()
         self.title_label['text'] = 'Edit your timetable'
@@ -122,7 +119,20 @@ class ScheduleLoginScreen():
             msg = self.client.recv()
 
             if msg == 'online':
-                messagebox.showinfo('Login', 'Your login went successfully')
+                allpeople = []
+                self.client.send(f"sch")
+                self.scheduleloginframe.pack_forget()
+                username = int(self.client.recv())
+                num = int(self.client.recv())
+                for i in range (0, num):
+                    allpeople.append([])
+                    for j in range(0, 8):
+                        allpeople[i].append(str(self.client.recv()))
+                print(allpeople)
+                ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username).scheduleframe.pack()
+                self.title_label['text'] = 'Schedule'
+                self.title_label['bg'] = 'grey'
+
             else:
                 messagebox.showwarning('Login', msg)
 

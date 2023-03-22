@@ -85,7 +85,7 @@ class ScheduleRegisterScreen():
         password = self.password_entry_reg.get().strip()
         passwordrep = self.confirm_password_entry_reg.get().strip()
 
-        if len(title) > 0 and len(password) > 0 and len(passwordrep):
+        if len(title) > 0 and len(password) > 0 and len(passwordrep) and " " not in title and " " not in password:
 
             self.client.send(f"create {title} {password} {passwordrep}")
             msg = self.client.recv()

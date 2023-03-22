@@ -9,7 +9,7 @@ from datetime import datetime
 
 class Server:
     IP = "0.0.0.0"
-    PORT = 5050
+    PORT = 8000
     ADDR = (IP, PORT)
     SERVER = ()
     SIZE = 4096
@@ -71,7 +71,8 @@ class Server:
                         username = msg.split()[0]
                         password = msg.split()[1]
                         password_rep = msg.split()[2]
-                        start_val = "000000000000000000000000"
+                        start_val = "111111111111111111111111"
+                        #start_val = "000000000000000000000000"
                         temp = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
                         if password != password_rep:
                             self.send(conn, "Passwords do not match.")
@@ -136,7 +137,6 @@ class Server:
                                 db_conn.commit()
                             self.send(conn, "online")
                             print(f'{client_id}. Logged in.')
-                            print(db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall() )
 
                     elif msg == "tt":
                         self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
@@ -223,6 +223,19 @@ class Server:
                             db_conn.execute(f'UPDATE `Users` SET `sunday` = "{str(new)}" WHERE `username` = "{username}"')
                             db_conn.commit()
                             print(new)
+                    elif msg == "sch":
+                        users = db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall()
+                        self.send(conn, str(username))
+                        self.send(conn, str(len(users)))
+                        for i in users:
+                            self.send(conn, str(i[0]))
+                            self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
 
                        # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
                         
