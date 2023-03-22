@@ -6,6 +6,7 @@ class ScheduleScreen():
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
+        self.tts_users = tts_users
         self.scheduleLoginframe = ScheduleLoginframe
         self.scheduleframe = Frame(mainframe, width=1920, height=1080)
         self.schedule_contentframe = Frame(self.scheduleframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
@@ -23,6 +24,9 @@ class ScheduleScreen():
 
         log_out_label = Label(self.schedule_contentframe, text="Back to entering a schedule", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
 
+        self.hover_available_label = Label(self.schedule_contentframe, text="Available:", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
+        self.hover_notAvailable_label = Label(self.schedule_contentframe, text="Not available:", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
+
         monday_label.grid(row=0, column=0, columnspan=2)
         tuesday_label.grid(row=0, column=2, columnspan=2)        
         wednesday_label.grid(row=0, column=4, columnspan=2)
@@ -33,16 +37,22 @@ class ScheduleScreen():
 
         log_out_label.grid(row=14, column = 4, columnspan=4, pady=50)
 
+        self.hover_available_label.grid(row=15, column = 4, columnspan=4, pady=50)
+        self.hover_notAvailable_label.grid(row=16, column = 4, columnspan=4, pady=20)
+
         log_out_label.bind("<Button-1>", lambda page: self.to_schedulelogin())
 
         users = []
         timetable = ['000000000000000000000000', '000000000000000000000000', '000000000000000000000000', '000000000000000000000000', '000000000000000000000000', '000000000000000000000000', '000000000000000000000000']
         num_users = len(tts_users)
+        self.num_users = num_users
 
         for u in range(0, num_users):
             if str(tts_users[u][0]) == str(username):
                 user_index = u
             users.append([u, tts_users[u][0]])
+
+        self.users = users
 
         for i in range(0, num_users):
             for j in range(1, 8):
@@ -53,6 +63,7 @@ class ScheduleScreen():
         print(users)
         print(timetable)
         print(user_index)
+
 
         self.labels = {}
 
@@ -85,6 +96,8 @@ class ScheduleScreen():
                 elif int(timetable[t // 2][12 * (t % 2) + (d - 1)]) >= 2 and user_selected == False: 
                     self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='pink', text=label_text)      
 
+                self.labels[14 * (d - 1) + t].bind("<Enter>", lambda event, day=t, time=d: self.on_enter(event, time, day))
+                self.labels[14 * (d - 1) + t].bind("<Leave>", self.on_leave)
                 self.labels[14 * (d - 1) + t].grid(row=d, column=t)
         
     def to_schedulelogin(self):
@@ -92,3 +105,19 @@ class ScheduleScreen():
         self.scheduleLoginframe.pack(fill='both', expand=1)
         self.title_label['text'] = 'Schedule Login'
         self.title_label['bg'] = 'purple'
+    
+    def on_enter(self, event, time, day):
+        using = []
+        not_using = []
+        for i in range(0, self.num_users):
+            if self.tts_users[i][day//2 + 1][12 * (day % 2) + (time - 1)] == '1':
+                using.append(str(self.tts_users[i][0]))
+            else:
+                not_using.append(str(self.tts_users[i][0]))
+
+        self.hover_available_label.configure(text="Available:" + ', '.join(using))
+        self.hover_notAvailable_label.configure(text="Not available:" + ', '.join(not_using))
+
+    def on_leave(self, enter):
+        self.hover_available_label.configure(text="Available:")
+        self.hover_notAvailable_label.configure(text="Not available:")
