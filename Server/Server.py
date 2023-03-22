@@ -4,7 +4,7 @@ import time
 import os
 import sqlite3
 import shutil
-#from bcrypt import hashpw, checkpw, gensalt
+from bcrypt import hashpw, checkpw, gensalt
 from datetime import datetime
 
 class Server:
@@ -79,7 +79,8 @@ class Server:
                         elif temp:
                             self.send(conn, "This username has already been used.")
                         else:
-                            db_conn.execute(f'INSERT INTO `Users` (`username`, `password`, `monday`,  `tuesday`,  `wednesday`,  `thursday`,  `friday`,  `saturday`,  `sunday`) VALUES("{username}", "{password}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}")')
+                            hashed_password = hashpw(password.encode(self.FORMAT), gensalt(5)).decode(self.FORMAT)
+                            db_conn.execute(f'INSERT INTO `Users` (`username`, `password`, `monday`,  `tuesday`,  `wednesday`,  `thursday`,  `friday`,  `saturday`,  `sunday`) VALUES("{username}", "{hashed_password}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}", "{start_val}")')
                             db_conn.commit()
                             client = self.CLIENTS[client_id]
                             self.send(conn, "online")
@@ -89,12 +90,12 @@ class Server:
                         msg = msg[6:]
                         username = msg.split()[0]
                         password = msg.split()[1]
-                       # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
-                        passwordd = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
-                        if not passwordd:
+                        hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        #passwordd = db_conn.execute(f'SELECT `password` FROM `Users` WHERE `username` = "{username}"').fetchone() 
+                        if not hashed_password:
                             self.send(conn, "There is no user with such login and password.")
                             print(f"{client_id}. There is no user with login - {username}.")
-                        elif str(passwordd[0]) != str(password):
+                        elif not checkpw(password.encode(self.FORMAT), hashed_password[0].encode(self.FORMAT)):
                             self.send(conn, "There is no user with such login and password.")
                             print(f"{client_id}. The password - {password} for user with login - {username} is wrong.")
                         else: 
@@ -112,7 +113,8 @@ class Server:
                         elif temp:
                             self.send(conn, "This title has already been used.")
                         else:
-                            db_conn.execute(f'INSERT INTO `Schedules` (`title`, `password`) VALUES("{title}", "{password}")')
+                            hashed_password = hashpw(password.encode(self.FORMAT), gensalt(5)).decode(self.FORMAT)
+                            db_conn.execute(f'INSERT INTO `Schedules` (`title`, `password`) VALUES("{title}", "{hashed_password}")')
                             db_conn.execute(f'INSERT INTO `Permissions` (`guestUsername`, `scheduleTitle`) VALUES("{username}", "{title}")')
                             db_conn.commit()
                             client = self.CLIENTS[client_id]
@@ -123,12 +125,12 @@ class Server:
                         msg = msg[10:]
                         title = msg.split()[0]
                         password = msg.split()[1]
-                       # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
-                        passwordd = db_conn.execute(f'SELECT `password` FROM `Schedules` WHERE `title` = "{title}"').fetchone() 
-                        if not passwordd:
+                        hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        #passwordd = db_conn.execute(f'SELECT `password` FROM `Schedules` WHERE `title` = "{title}"').fetchone() 
+                        if not hashed_password:
                             self.send(conn, "There is no schedule with such title and password.")
                             print(f"{client_id}. There is no schedule with title - {title}.")
-                        elif str(passwordd[0]) != str(password):
+                        elif not checkpw(password.encode(self.FORMAT), hashed_password[0].encode(self.FORMAT)):
                             self.send(conn, "There is no schedule with such title and password.")
                             print(f"{client_id}. The password - {password} for schedule with title - {title} is wrong.")
                         else: 
@@ -238,11 +240,6 @@ class Server:
                             self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
 
                        # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
-                        
-
-#str(db_conn.execute(f'SELECT `title` FROM `Schedules` WHERE `password` = "{f}"').fetchall())
-                       
-#достать из бд хэш пароль. Использоывть Асобенный функиця. сравнить. 
 
     def send(self, conn, msg):
         conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
