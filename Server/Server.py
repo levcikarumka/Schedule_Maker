@@ -125,7 +125,7 @@ class Server:
                         msg = msg[10:]
                         title = msg.split()[0]
                         password = msg.split()[1]
-                        hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
+                        hashed_password = db_conn.execute(f'SELECT password FROM Schedules WHERE title = "{title}"').fetchone()
                         #passwordd = db_conn.execute(f'SELECT `password` FROM `Schedules` WHERE `title` = "{title}"').fetchone() 
                         if not hashed_password:
                             self.send(conn, "There is no schedule with such title and password.")

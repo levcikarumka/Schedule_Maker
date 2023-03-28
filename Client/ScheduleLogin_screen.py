@@ -122,7 +122,7 @@ class ScheduleLoginScreen():
                 allpeople = []
                 self.client.send(f"sch")
                 self.scheduleloginframe.pack_forget()
-                username = int(self.client.recv())
+                username = self.client.recv()
                 num = int(self.client.recv())
                 for i in range (0, num):
                     allpeople.append([])
