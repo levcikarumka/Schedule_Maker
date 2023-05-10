@@ -3,9 +3,11 @@ from tkinter import messagebox
 from ScheduleRegister_screen import ScheduleRegisterScreen
 from Timetable_screen import TimetableScreen
 from Schedule_screen import ScheduleScreen
+from cryptography.fernet import Fernet
 
 class ScheduleLoginScreen():
-    def __init__ (self, mainframe, client, loginframe, title_label):
+    def __init__ (self, mainframe, client, loginframe, title_label, f):
+        self.f = f
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
@@ -74,7 +76,7 @@ class ScheduleLoginScreen():
 
     def to_scheduleCreate(self):
         self.scheduleloginframe.pack_forget()
-        ScheduleRegisterScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label).scheduleRegisterframe.pack()
+        ScheduleRegisterScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.f).scheduleRegisterframe.pack()
         self.title_label['text'] = 'Schedule Create'
         self.title_label['bg'] = 'pink'
 
@@ -90,13 +92,13 @@ class ScheduleLoginScreen():
 
     def to_timetableEdit(self):
         self.scheduleloginframe.pack_forget()
-        self.client.send(f"tt")
+        self.client.send(f"tt", self.f)
         self.array = []
         for i in range(0, 7):
-            self.array.append(self.client.recv())
+            self.array.append(self.client.recv(self.f))
 
         print(self.array)
-        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array).timetableframe.pack()
+        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array, self.f).timetableframe.pack()
         self.title_label['text'] = 'Edit your timetable'
         self.title_label['bg'] = 'orange'
 
@@ -109,22 +111,22 @@ class ScheduleLoginScreen():
         
         if len(scheduleName) > 0 and len(password) > 0:
 
-            self.client.send(f"sch_login {scheduleName} {password}")
+            self.client.send(f"sch_login {scheduleName} {password}", self.f)
 
-            msg = self.client.recv()
+            msg = self.client.recv(self.f)
 
             if msg == 'online':
                 allpeople = []
-                self.client.send(f"sch")
+                self.client.send(f"sch", self.f)
                 self.scheduleloginframe.pack_forget()
-                username = self.client.recv()
-                num = int(self.client.recv())
+                username = self.client.recv(self.f)
+                num = int(self.client.recv(self.f))
                 for i in range (0, num):
                     allpeople.append([])
                     for j in range(0, 8):
-                        allpeople[i].append(str(self.client.recv()))
+                        allpeople[i].append(str(self.client.recv(self.f)))
                 print(allpeople)
-                ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username).scheduleframe.pack()
+                ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username, self.f).scheduleframe.pack()
                 self.title_label['text'] = 'Schedule'
                 self.title_label['bg'] = 'grey'
 

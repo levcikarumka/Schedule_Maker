@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import messagebox 
+from cryptography.fernet import Fernet
 
 class ScheduleRegisterScreen():
-    def __init__ (self, mainframe, client, scheduleloginframe, title_label):
+    def __init__ (self, mainframe, client, scheduleloginframe, title_label, f):
+        self.f = f
         self.client = client
         self.scheduleloginframe = scheduleloginframe
         self.title_label = title_label
@@ -81,8 +83,8 @@ class ScheduleRegisterScreen():
 
         if len(title) > 0 and len(password) > 0 and len(passwordrep) and " " not in title and " " not in password:
 
-            self.client.send(f"create {title} {password} {passwordrep}")
-            msg = self.client.recv()
+            self.client.send(f"create {title} {password} {passwordrep}", self.f)
+            msg = self.client.recv(self.f)
             if msg == 'online':
                 messagebox.showinfo('Register', 'Your schedule was created successfully')
             else:

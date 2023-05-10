@@ -61,7 +61,7 @@ class LoginScreen():
 
     def to_register(self):
         self.loginframe.pack_forget()
-        RegisterScreen(self.mainframe, self.client, self.loginframe, self.title_label).registerframe.pack()
+        RegisterScreen(self.mainframe, self.client, self.loginframe, self.title_label, self.f).registerframe.pack()
         self.title_label['text'] = 'Register'
         self.title_label['bg'] = 'blue'
 
@@ -75,13 +75,13 @@ class LoginScreen():
         
         if len(username) > 0 and len(password) > 0:
 
-            self.client.send(f"login {username} {password}")
+            self.client.send(f"login {username} {password}", self.f)
 
-            msg = self.client.recv()
+            msg = self.client.recv(self.f)
 
             if msg == 'online':
                 self.loginframe.pack_forget()
-                ScheduleLoginScreen(self.mainframe, self.client, self.loginframe, self.title_label).scheduleloginframe.pack()
+                ScheduleLoginScreen(self.mainframe, self.client, self.loginframe, self.title_label, self.f).scheduleloginframe.pack()
                 self.title_label['text'] = 'Schedule Login'
                 self.title_label['bg'] = 'purple'
                 self.title_label['width'] = '25'

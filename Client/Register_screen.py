@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import messagebox 
+from cryptography.fernet import Fernet
 
 class RegisterScreen():
-    def __init__ (self, mainframe, client, loginframe, title_label):
+    def __init__ (self, mainframe, client, loginframe, title_label, f):
+        self.f = f
         self.client = client
         self.loginframe = loginframe
         self.title_label = title_label
@@ -81,8 +83,8 @@ class RegisterScreen():
 
         if len(username) > 0 and len(password) > 0 and len(passwordrep) and " " not in username and " " not in password:
 
-            self.client.send(f"reg {username} {password} {passwordrep}")
-            msg = self.client.recv()
+            self.client.send(f"reg {username} {password} {passwordrep}", self.f)
+            msg = self.client.recv(self.f)
             if msg == 'online':
                 messagebox.showinfo('Register', 'Your registration went successfully')
             else:

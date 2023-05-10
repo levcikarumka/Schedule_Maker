@@ -31,17 +31,24 @@ class Client:
                 pass
             sleep(0.1)
 
-    def send(self, msg):
+    def send(self, msg, f):
         msg = msg + "|"
-        self.conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
+        self.conn.send(f.encrypt(msg.encode(self.FORMAT, errors= 'ignore')))
     
-    def recv(self):
-        msg = self.conn.recv(self.SIZE).decode(self.FORMAT, errors= 'ignore')
+    def recv(self, f):
+        msg = f.decrypt(self.conn.recv(self.SIZE)).decode(self.FORMAT, errors= 'ignore')
         return msg
+    
+    def recv_key(self):
+        key = self.conn.recv(self.SIZE).decode(self.FORMAT, errors= 'ignore')
+        return key
 
 client = Client()
 
 root = Tk()
+
+key = client.recv_key()
+f = Fernet(key)
 
 # Window width and height
 w = root.winfo_screenwidth()
@@ -50,11 +57,8 @@ root.geometry(f'{w}x{h}+0+0')
 
 # close button function
 def close_window():
-    client.send('exit')
+    client.send('exit', f)
     root.destroy()
-
-key = client.recv()
-f = Fernet(key)
 
 headerframe = tk.Frame(root, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="black", width=w, height=70)
 titleframe = tk.Frame(headerframe, bg='purple', padx=1, pady=1)

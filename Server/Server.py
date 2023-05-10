@@ -63,7 +63,7 @@ class Server:
         conn = client.conn_msgs
         exit = False
         while not exit:
-            msg = conn.recv(self.SIZE).decode(self.FORMAT, errors= 'ignore')
+            msg = self.f.decrypt(conn.recv(self.SIZE)).decode(self.FORMAT, errors= 'ignore')
             print(msg)
             db_conn = sqlite3.connect('Server.db')
             msg_list = msg.split("|")
@@ -249,7 +249,7 @@ class Server:
                        # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
 
     def send(self, conn, msg):
-        conn.send(msg.encode(self.FORMAT, errors= 'ignore'))
+        conn.send(self.f.encrypt(msg.encode(self.FORMAT, errors= 'ignore')))
 
     def create_db(self, db_conn):
         db_conn.execute('''CREATE TABLE IF NOT EXISTS Users (

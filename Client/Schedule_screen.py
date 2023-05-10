@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import messagebox 
+from cryptography.fernet import Fernet
 
 class ScheduleScreen():
-    def __init__ (self, mainframe, client, ScheduleLoginframe, title_label, tts_users, username):
+    def __init__ (self, mainframe, client, ScheduleLoginframe, title_label, tts_users, username, f):
+        self.f = f
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe

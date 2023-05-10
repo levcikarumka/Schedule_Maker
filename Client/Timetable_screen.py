@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import messagebox 
+from cryptography.fernet import Fernet
 
 class TimetableScreen():
-    def __init__ (self, mainframe, client, scheduleLoginframe, title_label, tt_client):
+    def __init__ (self, mainframe, client, scheduleLoginframe, title_label, tt_client, f):
+        self.f = f
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
@@ -57,7 +59,7 @@ class TimetableScreen():
             self.buttons[14*(time) + day].configure(bg="green")
         
         print(day, time)
-        self.client.send(f"tt_st_ch {day} {time}")
+        self.client.send(f"tt_st_ch {day} {time}", self.f)
         
 
     def to_schedulelogin(self):
