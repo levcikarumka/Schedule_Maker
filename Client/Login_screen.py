@@ -2,12 +2,14 @@ from tkinter import *
 from Register_screen import RegisterScreen
 from tkinter import messagebox
 from ScheduleLogin_screen import ScheduleLoginScreen
+from cryptography.fernet import Fernet
 
 class LoginScreen():
-    def __init__ (self, mainframe, client, title_label):
+    def __init__ (self, mainframe, client, title_label, f):
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
+        self.f = f
         self.loginframe = Frame(mainframe, width=1920, height=1080)
         self.login_contentframe = Frame(self.loginframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
 

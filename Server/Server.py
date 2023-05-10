@@ -6,10 +6,11 @@ import sqlite3
 import shutil
 from bcrypt import hashpw, checkpw, gensalt
 from datetime import datetime
+from cryptography.fernet import Fernet
 
 class Server:
     IP = "0.0.0.0"
-    PORT = 8000
+    PORT = 5050
     ADDR = (IP, PORT)
     SERVER = ()
     SIZE = 4096
@@ -18,7 +19,11 @@ class Server:
     CLIENTS = []
     FINISH = False
 
+
     def main(self):
+        self.key = Fernet.generate_key()
+        self.f = Fernet(self.key)
+
         db_conn = sqlite3.connect('Server.db')
         self.create_db(db_conn)
         db_conn.execute(f'UPDATE Users SET clientId = NULL')
@@ -35,6 +40,7 @@ class Server:
         print(f"Listening: {self.IP}:{self.PORT}")
         create_thread(self.new_client_thread)
 
+
         while not self.FINISH:
             time.sleep(10)
         
@@ -50,6 +56,7 @@ class Server:
 
             print(f"\n{client_id}. New msgs connection: {addr} connected.")
             create_thread(self.handle_msgs_thread, (client_id,))
+            conn.send(self.key)
 
     def handle_msgs_thread(self, client_id):
         client = self.CLIENTS[client_id]

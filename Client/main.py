@@ -8,11 +8,12 @@ import socket
 from time import sleep
 from Login_screen import LoginScreen
 from Register_screen import RegisterScreen
+from cryptography.fernet import Fernet
 
 class Client:
     def __init__(self):
         self.IP = "127.0.0.1"
-        self.PORT = 8000
+        self.PORT = 5050
         self.SIZE = 4096
         self.FORMAT = "utf-8"
 
@@ -52,6 +53,9 @@ def close_window():
     client.send('exit')
     root.destroy()
 
+key = client.recv()
+f = Fernet(key)
+
 headerframe = tk.Frame(root, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="black", width=w, height=70)
 titleframe = tk.Frame(headerframe, bg='purple', padx=1, pady=1)
 title_label = tk.Label(titleframe, text="Login", padx=20, pady=5, bg="green", fg="#fff", font=('Times New Roman', 24), width=8)
@@ -68,7 +72,7 @@ close_button.place(x=410, y=10)
 close_button['command'] = close_window
 mainframe = tk.Frame(root, width=w, height=h)
 mainframe.pack()
-login_frame = LoginScreen(mainframe, client, title_label).loginframe
+login_frame = LoginScreen(mainframe, client, title_label, f).loginframe
 login_frame.pack()
 
 root.mainloop()
