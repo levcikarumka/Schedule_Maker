@@ -17,12 +17,7 @@ class LoginScreen():
         self.username_entry = Entry(self.login_contentframe, font=("Ariel", 14))
         self.password_entry = Entry(self.login_contentframe, font=("Ariel", 14), show='*')
 
-        cei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_closed.png'
-        oei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_opened.png'
-        self.closed_eye_icon = PhotoImage(file=cei)
-        self.open_eye_icon = PhotoImage(file=oei)
-
-        self.see_password_button = Button(self.login_contentframe, image=self.open_eye_icon, bg='cyan')
+        self.see_password_button = Button(self.login_contentframe, text="show", bg='cyan')
 
         login_button = Button(self.login_contentframe, text="Login", font=("Ariel", 16), bg="green", fg="#fff", padx=25, pady=10, width=25)
 
@@ -55,10 +50,10 @@ class LoginScreen():
     def show_password(self):
         if self.password_entry['show'] == "*":
            self.password_entry['show'] = ""
-           self.see_password_button['image'] = self.closed_eye_icon
+           self.see_password_button['text'] = "hide"
         else:
             self.password_entry['show'] = "*"
-            self.see_password_button['image'] = self.open_eye_icon
+            self.see_password_button['text'] = "show"
 
     #transfer to register page
 

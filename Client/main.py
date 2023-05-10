@@ -52,12 +52,6 @@ def close_window():
     client.send('exit')
     root.destroy()
 
-cei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_closed.png'
-oei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_opened.png'
-closed_eye_icon = PhotoImage(file=cei)
-open_eye_icon = PhotoImage(file=oei)
-
-
 headerframe = tk.Frame(root, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="black", width=w, height=70)
 titleframe = tk.Frame(headerframe, bg='purple', padx=1, pady=1)
 title_label = tk.Label(titleframe, text="Login", padx=20, pady=5, bg="green", fg="#fff", font=('Times New Roman', 24), width=8)

@@ -17,13 +17,7 @@ class RegisterScreen():
         self.password_entry_reg = Entry(self.register_contentframe, font=("Ariel", 14), show='*')
         self.confirm_password_entry_reg = Entry(self.register_contentframe, font=("Ariel", 14), show='*')
 
-        cei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_closed.png'
-        oei = '/Users/MrLeonidiy/Desktop/Cyber project/Schedule_Maker/Client/eye_opened.png'
-        self.closed_eye_icon = PhotoImage(file=cei)
-        self.open_eye_icon = PhotoImage(file=oei)
-
-
-        self.see_password_button_reg = Button(self.register_contentframe, image=self.open_eye_icon, bg="#90EE90")
+        self.see_password_button_reg = Button(self.register_contentframe, text="show", bg="#90EE90")
 
         register_button = Button(self.register_contentframe, text="Register", font=("Ariel", 16), bg="blue", fg="#fff", padx=25, pady=10, width=25)
 
@@ -55,11 +49,11 @@ class RegisterScreen():
         if self.password_entry_reg['show'] == "*":
             self.password_entry_reg['show'] = ""
             self.confirm_password_entry_reg['show'] = ""
-            self.see_password_button_reg['image'] = self.closed_eye_icon
+            self.see_password_button_reg['text'] = "hide"
         else:
             self.password_entry_reg['show'] = "*"
             self.confirm_password_entry_reg['show'] = "*"
-            self.see_password_button_reg['image'] = self.open_eye_icon
+            self.see_password_button_reg['text'] = "show"
 
     #transfer to login page
 
