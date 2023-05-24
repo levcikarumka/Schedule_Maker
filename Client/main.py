@@ -47,8 +47,11 @@ class Client:
 # close button function
 def close_window():
     if messagebox.askokcancel("Quit", "Do you really wish to quit?"):
-        client.send("exit", f)
-        root.destroy()
+        try:
+            client.send("exit", f)
+            root.destroy()
+        except:
+            root.destroy()
 
 client = Client()
 

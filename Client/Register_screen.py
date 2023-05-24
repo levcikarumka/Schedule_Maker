@@ -3,8 +3,9 @@ from tkinter import messagebox
 from cryptography.fernet import Fernet
 
 class RegisterScreen():
-    def __init__ (self, mainframe, client, loginframe, title_label, f):
+    def __init__ (self, root, mainframe, client, loginframe, title_label, f):
         self.f = f
+        self.root = root
         self.client = client
         self.loginframe = loginframe
         self.title_label = title_label
@@ -82,10 +83,14 @@ class RegisterScreen():
         passwordrep = self.confirm_password_entry_reg.get().strip()
 
         if len(username) > 0 and len(password) > 0 and len(passwordrep) and " " not in username and " " not in password:
-
-            self.client.send(f"reg {username} {password} {passwordrep}", self.f)
-            msg = self.client.recv(self.f)
-            if msg == 'online':
-                messagebox.showinfo('Register', 'Your registration went successfully')
-            else:
-                messagebox.showwarning('Register', msg)
+            
+            try:
+                self.client.send(f"reg {username} {password} {passwordrep}", self.f)
+                msg = self.client.recv(self.f)
+                if msg == 'online':
+                    messagebox.showinfo('Register', 'Your registration went successfully')
+                else:
+                    messagebox.showwarning('Register', msg)
+            except:
+                messagebox.showwarning('Server', "Server connection lost.")
+                self.root.destroy()

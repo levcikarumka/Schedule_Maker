@@ -6,8 +6,9 @@ from Schedule_screen import ScheduleScreen
 from cryptography.fernet import Fernet
 
 class ScheduleLoginScreen():
-    def __init__ (self, mainframe, client, loginframe, title_label, f):
+    def __init__ (self, root, mainframe, client, loginframe, title_label, f):
         self.f = f
+        self.root = root
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
@@ -76,7 +77,7 @@ class ScheduleLoginScreen():
 
     def to_scheduleCreate(self):
         self.scheduleloginframe.pack_forget()
-        ScheduleRegisterScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.f).scheduleRegisterframe.pack()
+        ScheduleRegisterScreen(self.root, self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.f).scheduleRegisterframe.pack()
         self.title_label['text'] = 'Schedule Create'
         self.title_label['bg'] = 'pink'
 
@@ -92,13 +93,17 @@ class ScheduleLoginScreen():
 
     def to_timetableEdit(self):
         self.scheduleloginframe.pack_forget()
-        self.client.send(f"tt", self.f)
-        self.array = self.client.recv(self.f).split('|')[:-1]
+        try:
+            self.client.send(f"tt", self.f)
+            self.array = self.client.recv(self.f).split('|')[:-1]
 
-        print(self.array)
-        TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array, self.f).timetableframe.pack()
-        self.title_label['text'] = 'Edit your timetable'
-        self.title_label['bg'] = 'orange'
+            print(self.array)
+            TimetableScreen(self.root, self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array, self.f).timetableframe.pack()
+            self.title_label['text'] = 'Edit your timetable'
+            self.title_label['bg'] = 'orange'
+        except:
+            messagebox.showwarning('Server', "Server connection lost.")
+            self.root.destroy()
 
     # schedule login
 
@@ -109,24 +114,33 @@ class ScheduleLoginScreen():
         
         if len(scheduleName) > 0 and len(password) > 0:
 
-            self.client.send(f"sch_login {scheduleName} {password}", self.f)
 
-            msg = self.client.recv(self.f)
+            try:
+                self.client.send(f"sch_login {scheduleName} {password}", self.f)
 
-            if msg == 'online':
-                allpeople = []
-                self.client.send(f"sch", self.f)
-                self.scheduleloginframe.pack_forget()
-                username = self.client.recv(self.f)
-                num = int(self.client.recv(self.f))
-                for i in range (0, num):
-                    allpeople.append(str(self.client.recv(self.f)).split('|')[:-1])
-                print(allpeople)
-                ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username, self.f).scheduleframe.pack()
-                self.title_label['text'] = 'Schedule'
-                self.title_label['bg'] = 'grey'
+                msg = self.client.recv(self.f)
 
-            else:
-                messagebox.showwarning('Login', msg)
+                if msg == 'online':
+                    allpeople = []
+                    try:
+                        self.client.send(f"sch", self.f)
+                    except:
+                        messagebox.showwarning('Server', "Server connection lost.")
+                        self.root.destroy()
+                    self.scheduleloginframe.pack_forget()
+                    username = self.client.recv(self.f)
+                    num = int(self.client.recv(self.f))
+                    for i in range (0, num):
+                        allpeople.append(str(self.client.recv(self.f)).split('|')[:-1])
+                    print(allpeople)
+                    ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username, self.f).scheduleframe.pack()
+                    self.title_label['text'] = 'Schedule'
+                    self.title_label['bg'] = 'grey'
+
+                else:
+                    messagebox.showwarning('Login', msg)
+            except:
+                messagebox.showwarning('Server', "Server connection lost.")
+                self.root.destroy()
 
 

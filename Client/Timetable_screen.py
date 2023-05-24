@@ -3,8 +3,9 @@ from tkinter import messagebox
 from cryptography.fernet import Fernet
 
 class TimetableScreen():
-    def __init__ (self, mainframe, client, scheduleLoginframe, title_label, tt_client, f):
+    def __init__ (self, root, mainframe, client, scheduleLoginframe, title_label, tt_client, f):
         self.f = f
+        self.root = root
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
@@ -59,7 +60,11 @@ class TimetableScreen():
             self.buttons[14*(time) + day].configure(bg="green")
         
         print(day, time)
-        self.client.send(f"tt_st_ch {day} {time}", self.f)
+        try:
+            self.client.send(f"tt_st_ch {day} {time}", self.f)
+        except:
+            messagebox.showwarning('Server', "Server connection lost.")
+            self.root.destroy()
         
 
     def to_schedulelogin(self):
