@@ -93,9 +93,7 @@ class ScheduleLoginScreen():
     def to_timetableEdit(self):
         self.scheduleloginframe.pack_forget()
         self.client.send(f"tt", self.f)
-        self.array = []
-        for i in range(0, 7):
-            self.array.append(self.client.recv(self.f))
+        self.array = self.client.recv(self.f).split('|')[:-1]
 
         print(self.array)
         TimetableScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, self.array, self.f).timetableframe.pack()
@@ -122,9 +120,7 @@ class ScheduleLoginScreen():
                 username = self.client.recv(self.f)
                 num = int(self.client.recv(self.f))
                 for i in range (0, num):
-                    allpeople.append([])
-                    for j in range(0, 8):
-                        allpeople[i].append(str(self.client.recv(self.f)))
+                    allpeople.append(str(self.client.recv(self.f)).split('|')[:-1])
                 print(allpeople)
                 ScheduleScreen(self.mainframe, self.client, self.scheduleloginframe, self.title_label, allpeople, username, self.f).scheduleframe.pack()
                 self.title_label['text'] = 'Schedule'

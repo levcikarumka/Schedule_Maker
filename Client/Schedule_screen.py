@@ -11,7 +11,7 @@ class ScheduleScreen():
         self.tts_users = tts_users
         self.scheduleLoginframe = ScheduleLoginframe
         self.scheduleframe = Frame(mainframe, width=1920, height=1080)
-        self.schedule_contentframe = Frame(self.scheduleframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
+        self.schedule_contentframe = Frame(self.scheduleframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="#CC7722")
 
         self.scheduleframe.pack(fill="both", expand=1)
         self.schedule_contentframe.pack(fill="both", expand=1)
@@ -96,7 +96,7 @@ class ScheduleScreen():
                 elif (int(timetable[t // 2][12 * (t % 2) + (d - 1)]) / num_users) >= 0.5 and user_selected == False: 
                     self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='red', text=label_text)
                 elif int(timetable[t // 2][12 * (t % 2) + (d - 1)]) >= 2 and user_selected == False: 
-                    self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='pink', text=label_text)      
+                    self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='#AA336A', text=label_text)      
 
                 self.labels[14 * (d - 1) + t].bind("<Enter>", lambda event, day=t, time=d: self.on_enter(event, time, day))
                 self.labels[14 * (d - 1) + t].bind("<Leave>", self.on_leave)

@@ -3,9 +3,12 @@ from Register_screen import RegisterScreen
 from tkinter import messagebox
 from ScheduleLogin_screen import ScheduleLoginScreen
 from cryptography.fernet import Fernet
+from time import sleep
+import socket
 
 class LoginScreen():
-    def __init__ (self, mainframe, client, title_label, f):
+    def __init__ (self, root, mainframe, client, title_label, f):
+        self.root = root
         self.client = client
         self.title_label = title_label
         self.mainframe = mainframe
@@ -74,19 +77,24 @@ class LoginScreen():
         password = self.password_entry.get().strip()
         
         if len(username) > 0 and len(password) > 0:
+            
+            try:
+                self.client.send(f"login {username} {password}", self.f)
+                msg = self.client.recv(self.f)
 
-            self.client.send(f"login {username} {password}", self.f)
+                if msg == 'online':
+                    self.loginframe.pack_forget()
+                    ScheduleLoginScreen(self.mainframe, self.client, self.loginframe, self.title_label, self.f).scheduleloginframe.pack()
+                    self.title_label['text'] = 'Schedule Login'
+                    self.title_label['bg'] = 'purple'
+                    self.title_label['width'] = '25'
 
-            msg = self.client.recv(self.f)
+                else:
+                    messagebox.showwarning('Login', msg)
 
-            if msg == 'online':
-                self.loginframe.pack_forget()
-                ScheduleLoginScreen(self.mainframe, self.client, self.loginframe, self.title_label, self.f).scheduleloginframe.pack()
-                self.title_label['text'] = 'Schedule Login'
-                self.title_label['bg'] = 'purple'
-                self.title_label['width'] = '25'
-
-            else:
-                messagebox.showwarning('Login', msg)
-
+            
+            except:
+                messagebox.showwarning('Server', "Server connection lost.")
+                self.root.destroy()
+               
 #проверить на знаки особенные и пробелы

@@ -7,6 +7,7 @@ import shutil
 from bcrypt import hashpw, checkpw, gensalt
 from datetime import datetime
 from cryptography.fernet import Fernet
+from time import sleep
 
 class Server:
     IP = "0.0.0.0"
@@ -148,13 +149,29 @@ class Server:
                             print(f'{client_id}. Logged in.')
 
                     elif msg == "tt":
-                        self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
-                        self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array = []
+
+                        array.append(str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        array.append(str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+
+                        string = ""
+                        for s in array:
+                            string += s + "|"
+
+                        self.send(conn, string)
+                        
+                        #self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
+                        #self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{username}"').fetchone())[2:-3])
        
                     elif msg[:8] == "tt_st_ch": # when user changes his own timetbale
                         msg = msg[9:]
@@ -237,14 +254,31 @@ class Server:
                         self.send(conn, str(username))
                         self.send(conn, str(len(users)))
                         for i in users:
-                            self.send(conn, str(i[0]))
-                            self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
-                            self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array = []
+                            array.append(str(i[0]))
+                            array.append(str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            array.append(str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+
+                            string = ""
+                            for s in array:
+                                string += s + "|"
+
+                            self.send(conn, string)
+                            sleep(0.1)
+
+                            #self.send(conn, str(i[0]))
+                            #self.send(conn, str(db_conn.execute(f'SELECT `monday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `tuesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `wednesday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `thursday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `friday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `saturday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
+                            #self.send(conn, str(db_conn.execute(f'SELECT `sunday` FROM `Users` WHERE `username` = "{i[0]}"').fetchone())[2:-3])
 
                        # hashed_password = db_conn.execute(f'SELECT password FROM Users WHERE username = "{username}"').fetchone()
 

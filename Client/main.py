@@ -3,7 +3,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter import messagebox 
-import mysql.connector
 import socket
 from time import sleep
 from Login_screen import LoginScreen
@@ -12,7 +11,9 @@ from cryptography.fernet import Fernet
 
 class Client:
     def __init__(self):
-        self.IP = "127.0.0.1"
+        self.IP = "192.168.1.107"
+       # self.IP = IP
+        #self.IP = input("input server ip ")
         self.PORT = 5050
         self.SIZE = 4096
         self.FORMAT = "utf-8"
@@ -27,7 +28,7 @@ class Client:
                 print(f"Client connected to server at {self.IP}:{self.PORT}.")
                 finished = True
                 break
-            except:
+            except: 
                 pass
             sleep(0.1)
 
@@ -43,6 +44,12 @@ class Client:
         key = self.conn.recv(self.SIZE).decode(self.FORMAT, errors= 'ignore')
         return key
 
+# close button function
+def close_window():
+    if messagebox.askokcancel("Quit", "Do you really wish to quit?"):
+        client.send("exit", f)
+        root.destroy()
+
 client = Client()
 
 root = Tk()
@@ -54,11 +61,6 @@ f = Fernet(key)
 w = root.winfo_screenwidth()
 h = root.winfo_screenheight()
 root.geometry(f'{w}x{h}+0+0') 
-
-# close button function
-def close_window():
-    client.send('exit', f)
-    root.destroy()
 
 headerframe = tk.Frame(root, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="black", width=w, height=70)
 titleframe = tk.Frame(headerframe, bg='purple', padx=1, pady=1)
@@ -76,7 +78,8 @@ close_button.place(x=410, y=10)
 close_button['command'] = close_window
 mainframe = tk.Frame(root, width=w, height=h)
 mainframe.pack()
-login_frame = LoginScreen(mainframe, client, title_label, f).loginframe
+login_frame = LoginScreen(root, mainframe, client, title_label, f).loginframe
 login_frame.pack()
 
+root.protocol("WM_DELETE_WINDOW", close_window)
 root.mainloop()
