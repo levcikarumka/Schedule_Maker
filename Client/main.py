@@ -13,7 +13,7 @@ class Client:
     def __init__(self):
         self.IP = "192.168.1.107"
         #self.IP = input("input server ip ")
-        self.PORT = 5050
+        self.PORT = 8000
         self.SIZE = 4096
         self.FORMAT = "utf-8"
 

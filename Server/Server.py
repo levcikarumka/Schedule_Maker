@@ -11,7 +11,7 @@ from time import sleep
 
 class Server:
     IP = "0.0.0.0"
-    PORT = 5050
+    PORT = 8000
     ADDR = (IP, PORT)
     SERVER = ()
     SIZE = 4096

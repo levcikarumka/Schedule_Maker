@@ -16,18 +16,26 @@ class ScheduleScreen():
         #self.scheduleframe.pack(fill="both", expand=1)
         self.schedule_contentframe.pack(fill="both", expand=1)
 
-        monday_label = Label(self.schedule_contentframe, text="Monday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        tuesday_label = Label(self.schedule_contentframe, text="Tuesday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        wednesday_label = Label(self.schedule_contentframe, text="Wednesday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        thursday_label = Label(self.schedule_contentframe, text="Thursday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        friday_label = Label(self.schedule_contentframe, text="Friday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        saturday_label = Label(self.schedule_contentframe, text="Saturday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
-        sunday_label = Label(self.schedule_contentframe, text="Sunday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
+        monday_label = Label(self.schedule_contentframe, text="Monday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        tuesday_label = Label(self.schedule_contentframe, text="Tuesday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        wednesday_label = Label(self.schedule_contentframe, text="Wednesday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        thursday_label = Label(self.schedule_contentframe, text="Thursday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        friday_label = Label(self.schedule_contentframe, text="Friday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        saturday_label = Label(self.schedule_contentframe, text="Saturday", font=("Ariel", 14), bg="white", fg='red', width=20)
+        sunday_label = Label(self.schedule_contentframe, text="Sunday", font=("Ariel", 14), bg="white", fg='red', width=20)
 
-        log_out_label = Label(self.schedule_contentframe, text="Back to entering a schedule", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
+        log_out_label = Label(self.schedule_contentframe, text="Back to entering a schedule", font=("Ariel", 14), bg="white", fg='red', width=40)
 
-        self.hover_available_label = Label(self.schedule_contentframe, text="Available:", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
-        self.hover_notAvailable_label = Label(self.schedule_contentframe, text="Not available:", font=("Ariel", 14), bg="#90EE90", fg='red', width=40)
+        self.hover_available_label = Label(self.schedule_contentframe, text="Available:", font=("Ariel", 14), bg="white", fg='red', width=40)
+        self.hover_notAvailable_label = Label(self.schedule_contentframe, text="Not available:", font=("Ariel", 14), bg="white", fg='red', width=40)
+
+        greencolorinfo_label = Label(self.schedule_contentframe, text="Green - all people selected this time", font=("Ariel", 9), bg="white")
+        pinkcolorinfo_label = Label(self.schedule_contentframe, text="Pink - more than 2 people of the group selected this time, but not you", font=("Ariel", 9), bg="white")
+        redcolorinfo_label = Label(self.schedule_contentframe, text="Red - most of the groups selected this time, but not you", font=("Ariel", 9), bg="white")
+        aquacolorinfo_label = Label(self.schedule_contentframe, text="Aqua - you and most of the group selected this time", font=("Ariel", 9), bg="white")
+        bluecolorinfo_label = Label(self.schedule_contentframe, text="Blue - you and not more than half of the group selected this time", font=("Ariel", 9), bg="white")
+        yellowcolorinfo_label = Label(self.schedule_contentframe, text="Yellow - only you selected this time", font=("Ariel", 9), bg="white")
+        whitecolorinfo_label = Label(self.schedule_contentframe, text="White - no one or just one person (not you) selected this time", font=("Ariel", 9), bg="white")
 
         monday_label.grid(row=0, column=0, columnspan=2)
         tuesday_label.grid(row=0, column=2, columnspan=2)        
@@ -35,11 +43,20 @@ class ScheduleScreen():
         thursday_label.grid(row=0, column=6, columnspan=2)
         friday_label.grid(row=0, column=8, columnspan=2)
         saturday_label.grid(row=0, column=10, columnspan=2)
-        sunday_label.grid(row=0, column=12, columnspan=2)        
+        sunday_label.grid(row=0, column=12, columnspan=2)    
 
-        log_out_label.grid(row=14, column = 4, columnspan=4, pady=50)
+        greencolorinfo_label.grid(row=14, column=9, columnspan=4)
+        pinkcolorinfo_label.grid(row=15, column=9, columnspan=4)
+        redcolorinfo_label.grid(row=16, column=9, columnspan=4)
+        aquacolorinfo_label .grid(row=14, column=0, columnspan=4)
+        bluecolorinfo_label .grid(row=15, column=0, columnspan=4)
+        yellowcolorinfo_label.grid(row=16, column=0, columnspan=4)
+        whitecolorinfo_label.grid(row=17, column=0, columnspan=4, pady=20)
+ 
 
-        self.hover_available_label.grid(row=15, column = 4, columnspan=4, pady=50)
+        log_out_label.grid(row=14, column = 4, columnspan=4, pady=20)
+
+        self.hover_available_label.grid(row=15, column = 4, columnspan=4, pady=20)
         self.hover_notAvailable_label.grid(row=16, column = 4, columnspan=4, pady=20)
 
         log_out_label.bind("<Button-1>", lambda page: self.to_schedulelogin())
@@ -74,9 +91,9 @@ class ScheduleScreen():
         for d in range(1, 13):
             for t in range(0, 14):
                 if t % 2 == 0:
-                    label_text = str((d - 1)) + ":00-" + str((d - 1)) + ":59"
+                    label_text = str((d - 1)) + ":00-" + str((d)) + ":00"
                 else:
-                    label_text = str((d + 11)) + ":00-" + str((d + 11)) + ":59"
+                    label_text = str((d + 11)) + ":00-" + str((d + 12)) + ":00"
 
                 if tts_users[user_index][(t // 2) + 1][12 * (t % 2) + (d - 1)] == '1':
                     user_selected = True 
