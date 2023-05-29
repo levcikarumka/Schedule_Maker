@@ -14,28 +14,28 @@ class LoginScreen():
         self.mainframe = mainframe
         self.f = f
         self.loginframe = Frame(mainframe, width=1920, height=1080)
-        self.login_contentframe = Frame(self.loginframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
+        self.login_contentframe = Frame(self.loginframe, padx=15, pady=100, bg="white")
 
-        self.username_label = Label(self.login_contentframe, text="Username:", font=("Ariel", 14), bg="cyan")
-        self.password_label = Label(self.login_contentframe, text="Password:", font=("Ariel", 14), bg="cyan")
+        self.username_label = Label(self.login_contentframe, text="Username:", font=("Ariel", 14), bg="white", fg="black")
+        self.password_label = Label(self.login_contentframe, text="Password:", font=("Ariel", 14), bg="white", fg="black")
 
-        self.username_entry = Entry(self.login_contentframe, font=("Ariel", 14))
-        self.password_entry = Entry(self.login_contentframe, font=("Ariel", 14), show='*')
+        self.username_entry = Entry(self.login_contentframe, font=("Ariel", 14), borderwidth=2)
+        self.password_entry = Entry(self.login_contentframe, font=("Ariel", 14), borderwidth=2, show='*')
 
-        self.see_password_button = Button(self.login_contentframe, text="show", bg='cyan')
+        self.see_password_button = Button(self.login_contentframe, text="show", bg='white', fg="black")
 
         login_button = Button(self.login_contentframe, text="Login", font=("Ariel", 16), bg="green", fg="#fff", padx=25, pady=10, width=25)
 
-        to_register_label = Label(self.login_contentframe, text="New here? Register now!", font=("Ariel", 14), bg="cyan", fg='red')
+        to_register_label = Label(self.login_contentframe, text="New here? Register now!", font=("Ariel", 14), bg="white", fg='red')
 
         mainframe.pack(fill="both", expand=1)
-        self.loginframe.pack(fill="both", expand=1)
+        #self.loginframe.pack(fill="both", expand=1)
         self.login_contentframe.pack(fill="both", expand=1)
 
-        self.username_label.grid(row=0, column=0, pady=15)
+        self.username_label.grid(row=0, column=0, pady=15, sticky='e')
         self.username_entry.grid(row=0, column=1)
 
-        self.password_label.grid(row=1, column=0, pady=15)
+        self.password_label.grid(row=1, column=0, pady=15, sticky='e')
         self.password_entry.grid(row=1, column=1)
 
         self.see_password_button.grid(row=1, column=2)
@@ -63,7 +63,7 @@ class LoginScreen():
     #transfer to register page
 
     def to_register(self):
-        self.loginframe.pack_forget()
+        self.loginframe.forget()
         RegisterScreen(self.root, self.mainframe, self.client, self.loginframe, self.title_label, self.f).registerframe.pack()
         self.title_label['text'] = 'Register'
         self.title_label['bg'] = 'blue'

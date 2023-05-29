@@ -14,27 +14,27 @@ class ScheduleLoginScreen():
         self.mainframe = mainframe
         self.loginframe = loginframe
         self.scheduleloginframe = Frame(mainframe, width=1920, height=1080)
-        self.scheduleLogin_contentframe = Frame(self.scheduleloginframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
+        self.scheduleLogin_contentframe = Frame(self.scheduleloginframe, padx=15, pady=100, bg="white")
 
-        self.scheduleName_label = Label(self.scheduleLogin_contentframe, text="Title:", font=("Ariel", 14), bg="cyan")
-        self.password_label = Label(self.scheduleLogin_contentframe, text="Password:", font=("Ariel", 14), bg="cyan")
+        self.scheduleName_label = Label(self.scheduleLogin_contentframe, text="Title:", font=("Ariel", 14), bg="white")
+        self.password_label = Label(self.scheduleLogin_contentframe, text="Password:", font=("Ariel", 14), bg="white")
 
-        self.scheduleName_entry = Entry(self.scheduleLogin_contentframe, font=("Ariel", 14))
-        self.password_entry = Entry(self.scheduleLogin_contentframe, font=("Ariel", 14), show='*')
+        self.scheduleName_entry = Entry(self.scheduleLogin_contentframe, borderwidth=2, font=("Ariel", 14))
+        self.password_entry = Entry(self.scheduleLogin_contentframe, borderwidth=2, font=("Ariel", 14), show='*')
 
-        self.see_password_button = Button(self.scheduleLogin_contentframe, text="show", bg='cyan')
+        self.see_password_button = Button(self.scheduleLogin_contentframe, text="show", bg='white')
 
-        login_button = Button(self.scheduleLogin_contentframe, text="Login", font=("Ariel", 16), bg="green", fg="#fff", padx=25, pady=10, width=25)
+        login_button = Button(self.scheduleLogin_contentframe, text="Login", font=("Ariel", 16), bg="purple", fg="#fff", padx=25, pady=10, width=25)
 
-        to_register_label = Label(self.scheduleLogin_contentframe, text="Want to create new schedule? Do it now!", font=("Ariel", 14), bg="cyan", fg='red')
+        to_register_label = Label(self.scheduleLogin_contentframe, text="Want to create new schedule? Do it now!", font=("Ariel", 14), bg="white", fg='red')
         
-        timetable_label = Label(self.scheduleLogin_contentframe, text="Edit your own timetable", font=("Ariel", 14), bg="cyan", fg='red')
+        timetable_label = Label(self.scheduleLogin_contentframe, text="Edit your own timetable", font=("Ariel", 14), bg="white", fg='red')
 
 
-        logout_label = Label(self.scheduleLogin_contentframe, text="Log out", font=("Ariel", 14), bg="cyan", fg='red')
+        logout_label = Label(self.scheduleLogin_contentframe, text="Log out", font=("Ariel", 14), bg="white", fg='red')
 
        # mainframe.pack(fill="both", expand=1)
-        self.scheduleloginframe.pack(fill="both", expand=1)
+       # self.scheduleloginframe.pack(fill="both", expand=1)
         self.scheduleLogin_contentframe.pack(fill="both", expand=1)
 
         self.scheduleName_label.grid(row=0, column=0, pady=15)
@@ -85,7 +85,7 @@ class ScheduleLoginScreen():
 
     def log_out(self):
         self.scheduleloginframe.pack_forget()
-        self.loginframe.pack(fill='both', expand=1)
+        self.loginframe.pack()
         self.title_label['text'] = 'Login'
         self.title_label['bg'] = 'green'
 

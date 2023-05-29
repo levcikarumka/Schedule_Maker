@@ -11,9 +11,9 @@ class ScheduleScreen():
         self.tts_users = tts_users
         self.scheduleLoginframe = ScheduleLoginframe
         self.scheduleframe = Frame(mainframe, width=1920, height=1080)
-        self.schedule_contentframe = Frame(self.scheduleframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="#CC7722")
+        self.schedule_contentframe = Frame(self.scheduleframe, padx=15, pady=100, bg="white")
 
-        self.scheduleframe.pack(fill="both", expand=1)
+        #self.scheduleframe.pack(fill="both", expand=1)
         self.schedule_contentframe.pack(fill="both", expand=1)
 
         monday_label = Label(self.schedule_contentframe, text="Monday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
@@ -104,7 +104,7 @@ class ScheduleScreen():
         
     def to_schedulelogin(self):
         self.scheduleframe.forget()
-        self.scheduleLoginframe.pack(fill='both', expand=1)
+        self.scheduleLoginframe.pack()
         self.title_label['text'] = 'Schedule Login'
         self.title_label['bg'] = 'purple'
     

@@ -11,9 +11,9 @@ class TimetableScreen():
         self.mainframe = mainframe
         self.scheduleLoginframe = scheduleLoginframe
         self.timetableframe = Frame(mainframe, width=1920, height=1080)
-        self.timetable_contentframe = Frame(self.timetableframe, padx=15, pady=100, highlightbackground='purple', highlightcolor='purple', highlightthickness=2, bg="cyan")
+        self.timetable_contentframe = Frame(self.timetableframe, padx=15, pady=100, bg="white")
 
-        self.timetableframe.pack(fill="both", expand=1)
+       #self.timetableframe.pack(fill="both", expand=1)
         self.timetable_contentframe.pack(fill="both", expand=1)
 
         monday_label = Label(self.timetable_contentframe, text="Monday", font=("Ariel", 14), bg="#90EE90", fg='red', width=20)
@@ -69,7 +69,7 @@ class TimetableScreen():
 
     def to_schedulelogin(self):
         self.timetableframe.forget()
-        self.scheduleLoginframe.pack(fill='both', expand=1)
+        self.scheduleLoginframe.pack()
         self.title_label['text'] = 'Schedule Login'
         self.title_label['bg'] = 'purple'
 
