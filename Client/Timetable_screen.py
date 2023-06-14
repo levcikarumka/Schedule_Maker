@@ -26,8 +26,8 @@ class TimetableScreen():
 
         to_login_label = Label(self.timetable_contentframe, text="Back to entering a schedule", font=("Ariel", 14), bg="white", fg='red', width=40)
 
-        greencolorinfo_label = Label(self.timetable_contentframe, text="Green - you are free at this time", font=("Ariel", 9), bg="white")
-        whitecolorinfo_label = Label(self.timetable_contentframe, text="White - you are busy at this time", font=("Ariel", 9), bg="white")
+        greencolorinfo_label = Label(self.timetable_contentframe, text="Green - you are free at this time", font=("Ariel", 14), bg="white")
+        whitecolorinfo_label = Label(self.timetable_contentframe, text="White - you are busy at this time", font=("Ariel", 14), bg="white")
 
         monday_label.grid(row=0, column=0, columnspan=2)
         tuesday_label.grid(row=0, column=2, columnspan=2)        
@@ -37,8 +37,8 @@ class TimetableScreen():
         saturday_label.grid(row=0, column=10, columnspan=2)
         sunday_label.grid(row=0, column=12, columnspan=2)        
 
-        greencolorinfo_label.grid(row=14, column=0, columnspan=3)
-        whitecolorinfo_label.grid(row=14, column=8, columnspan=3)    
+        greencolorinfo_label.grid(row=14, column=0, columnspan=4)
+        whitecolorinfo_label.grid(row=14, column=8, columnspan=4)    
     
 
         to_login_label.grid(row=14, column = 4, columnspan=4, pady=50)

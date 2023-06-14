@@ -252,6 +252,7 @@ class Server:
                     elif msg == "sch":
                         users = db_conn.execute(f'SELECT `guestUsername` FROM `Permissions` WHERE `scheduleTitle` = "{title}"').fetchall()
                         self.send(conn, str(username))
+                        sleep(0.1)
                         self.send(conn, str(len(users)))
                         for i in users:
                             array = []

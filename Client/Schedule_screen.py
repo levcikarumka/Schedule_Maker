@@ -29,13 +29,13 @@ class ScheduleScreen():
         self.hover_available_label = Label(self.schedule_contentframe, text="Available:", font=("Ariel", 14), bg="white", fg='red', width=40)
         self.hover_notAvailable_label = Label(self.schedule_contentframe, text="Not available:", font=("Ariel", 14), bg="white", fg='red', width=40)
 
-        greencolorinfo_label = Label(self.schedule_contentframe, text="Green - all people selected this time", font=("Ariel", 9), bg="white")
-        pinkcolorinfo_label = Label(self.schedule_contentframe, text="Pink - more than 2 people of the group selected this time, but not you", font=("Ariel", 9), bg="white")
-        redcolorinfo_label = Label(self.schedule_contentframe, text="Red - most of the groups selected this time, but not you", font=("Ariel", 9), bg="white")
-        aquacolorinfo_label = Label(self.schedule_contentframe, text="Aqua - you and most of the group selected this time", font=("Ariel", 9), bg="white")
-        bluecolorinfo_label = Label(self.schedule_contentframe, text="Blue - you and not more than half of the group selected this time", font=("Ariel", 9), bg="white")
-        yellowcolorinfo_label = Label(self.schedule_contentframe, text="Yellow - only you selected this time", font=("Ariel", 9), bg="white")
-        whitecolorinfo_label = Label(self.schedule_contentframe, text="White - no one or just one person (not you) selected this time", font=("Ariel", 9), bg="white")
+        greencolorinfo_label = Label(self.schedule_contentframe, text="Green - all people selected this time", font=("Ariel", 14), bg="white")
+        pinkcolorinfo_label = Label(self.schedule_contentframe, text="Purple - more than 2 people of the group selected this time, but not you", font=("Ariel", 14), bg="white")
+        redcolorinfo_label = Label(self.schedule_contentframe, text="Red - most of the groups selected this time, but not you", font=("Ariel", 14), bg="white")
+        aquacolorinfo_label = Label(self.schedule_contentframe, text="Aqua - you and most of the group selected this time", font=("Ariel", 14), bg="white")
+        bluecolorinfo_label = Label(self.schedule_contentframe, text="Blue - you and not more than half of the group selected this time", font=("Ariel", 14), bg="white")
+        yellowcolorinfo_label = Label(self.schedule_contentframe, text="Yellow - only you selected this time", font=("Ariel", 14), bg="white")
+        whitecolorinfo_label = Label(self.schedule_contentframe, text="White - no one or just one person (not you) selected this time", font=("Ariel", 14), bg="white")
 
         monday_label.grid(row=0, column=0, columnspan=2)
         tuesday_label.grid(row=0, column=2, columnspan=2)        
@@ -45,13 +45,13 @@ class ScheduleScreen():
         saturday_label.grid(row=0, column=10, columnspan=2)
         sunday_label.grid(row=0, column=12, columnspan=2)    
 
-        greencolorinfo_label.grid(row=14, column=9, columnspan=4)
-        pinkcolorinfo_label.grid(row=15, column=9, columnspan=4)
-        redcolorinfo_label.grid(row=16, column=9, columnspan=4)
-        aquacolorinfo_label .grid(row=14, column=0, columnspan=4)
-        bluecolorinfo_label .grid(row=15, column=0, columnspan=4)
-        yellowcolorinfo_label.grid(row=16, column=0, columnspan=4)
-        whitecolorinfo_label.grid(row=17, column=0, columnspan=4, pady=20)
+        greencolorinfo_label.grid(row=14, column=9, columnspan=5)
+        pinkcolorinfo_label.grid(row=15, column=9, columnspan=5)
+        redcolorinfo_label.grid(row=16, column=9, columnspan=5)
+        aquacolorinfo_label .grid(row=14, column=0, columnspan=5)
+        bluecolorinfo_label .grid(row=15, column=0, columnspan=5)
+        yellowcolorinfo_label.grid(row=16, column=0, columnspan=5)
+        whitecolorinfo_label.grid(row=17, column=0, columnspan=5, pady=20)
  
 
         log_out_label.grid(row=14, column = 4, columnspan=4, pady=20)
@@ -107,7 +107,7 @@ class ScheduleScreen():
                 elif timetable[t // 2][12 * (t % 2) + (d - 1)] == '1' and user_selected == True: 
                     self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='yellow', text=label_text)
                 elif (int(timetable[t // 2][12 * (t % 2) + (d - 1)]) / num_users) < 0.5 and user_selected == True: 
-                    self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='#00008B', text=label_text)
+                    self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), fg="white", bg='#00008B', text=label_text)
                 elif (int(timetable[t // 2][12 * (t % 2) + (d - 1)]) / num_users) >= 0.5 and user_selected == True: 
                     self.labels[14 * (d - 1) + t] = Label(self.schedule_contentframe, width=9, font=('Arial',16,'bold'), bg='#00FFFF', text=label_text)
                 elif (int(timetable[t // 2][12 * (t % 2) + (d - 1)]) / num_users) >= 0.5 and user_selected == False: 
